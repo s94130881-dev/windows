@@ -5,7 +5,7 @@ services:
 
     environment:
       VERSION: "10"
-      RAM_SIZE: "64G"
+      RAM_SIZE: "12G"
       CPU_CORES: "16"
       DISK_SIZE: "100G"
       CPU_MODEL: "host"
