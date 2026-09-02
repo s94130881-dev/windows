@@ -1,22 +1,58 @@
 services:
   windows:
     container_name: windows
-    image: ghcr.io/dockur/windows
+    image: ghcr.io/dockur/windows:latest
+
     environment:
       VERSION: "10"
       RAM_SIZE: "8G"
-      DISK_SIZE: "300G"
       CPU_CORES: "4"
+      DISK_SIZE: "300G"
+
     devices:
       - /dev/kvm
       - /dev/net/tun
+
     cap_add:
       - NET_ADMIN
+
     ports:
-      - 8006:8006
-      - 3389:3389/tcp
-      - 3389:3389/udp
+      - "8006:8006"
+      - "3389:3389/tcp"
+      - "3389:3389/udp"
+
     volumes:
       - ./windows:/storage
-    restart: on-failure
+
+    restart: unless-stopped
+
     stop_grace_period: 2m
+
+    networks:
+      - windows-net
+
+  info:
+    image: alpine:latest
+    container_name: windows-info
+    depends_on:
+      - windows
+    command: >
+      sh -c '
+        echo "================================";
+        echo " WINDOWS 10 VM";
+        echo "================================";
+        echo "IP interno da VM/container:";
+        sleep 5;
+        apk add --no-cache iproute2 >/dev/null 2>&1;
+        ip addr;
+        echo "================================";
+        echo "Web:  http://localhost:8006";
+        echo "RDP:  localhost:3389";
+        echo "================================";
+      '
+    networks:
+      - windows-net
+
+networks:
+  windows-net:
+    driver: bridge
