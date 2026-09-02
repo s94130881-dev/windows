@@ -1,10 +1,15 @@
 {
   "name": "Windows 10 Pro",
   "service": "windows",
+  "hostRequirements": {
+    "memory": "8gb",
+    "cpus": 4,
+    "storage": "300gb"
+  },
   "containerEnv": {
     "VERSION": "10"
   },
-  "forwardPorts": [8006],  
+  "forwardPorts": [8006],
   "portsAttributes": {
     "8006": {
       "label": "Web",
@@ -13,7 +18,7 @@
   },
   "otherPortsAttributes": {
     "onAutoForward": "ignore"
-  }, 
+  },
   "dockerComposeFile": "../codespaces.yml",
   "initializeCommand": "docker system prune --all --force"
 }
