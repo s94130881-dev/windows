@@ -48,7 +48,7 @@ spec:
 
             # Memória RAM da VM
             - name: RAM_SIZE
-              value: "64G"
+              value: "16G"
 
             # CPUs virtuais
             - name: CPU_CORES
