@@ -1,16 +1,16 @@
 services:
   windows:
-    image: ghcr.io/dockurr/windows:latest
     container_name: windows
+    image: ghcr.io/dockur/windows:latest
 
     environment:
       VERSION: "10"
-      RAM_SIZE: "12G"
-      CPU_CORES: "16"
-      DISK_SIZE: "100G"
-      CPU_MODEL: "host"
-      KVM: "Y"
-      RAM_CHECK: "Y"
+      RAM_SIZE: "8G"       # Configurado com 8 GB de RAM
+      CPU_CORES: "2"       
+      DISK_SIZE: "80G"     # Alterado para 80 GB de SSD
+
+    # Necessário para o correto funcionamento do KVM no Codespaces
+    privileged: true 
 
     devices:
       - /dev/kvm
@@ -29,3 +29,31 @@ services:
 
     restart: unless-stopped
     stop_grace_period: 2m
+    networks:
+      - windows-net
+
+  info:
+    image: alpine:latest
+    container_name: windows-info
+    depends_on:
+      - windows
+    command: >
+      sh -c '
+        echo "================================";
+        echo " WINDOWS 10 VM";
+        echo "================================";
+        echo "IP interno da VM/container:";
+        sleep 5;
+        apk add --no-cache iproute2 >/dev/null 2>&1;
+        ip addr;
+        echo "================================";
+        echo "Web:  http://localhost:8006";
+        echo "RDP:  localhost:3389";
+        echo "================================";
+      '
+    networks:
+      - windows-net
+
+networks:
+  windows-net:
+    driver: bridge
