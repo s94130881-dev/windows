@@ -7,7 +7,7 @@ services:
       VERSION: "10"
       RAM_SIZE: "64G"
       CPU_CORES: "16"
-      DISK_SIZE: "100G"
+      DISK_SIZE: "128G"
 
     devices:
       - /dev/kvm
@@ -25,7 +25,6 @@ services:
       - ./windows:/storage
 
     restart: unless-stopped
-
     stop_grace_period: 2m
 
     networks:
@@ -41,7 +40,6 @@ services:
         echo "================================";
         echo " WINDOWS 10 VM";
         echo "================================";
-        echo "IP interno da VM/container:";
         sleep 5;
         apk add --no-cache iproute2 >/dev/null 2>&1;
         ip addr;
